@@ -42,6 +42,16 @@ class Pesanan extends CI_Controller
 		// var_dump($as_user);
 
 		$plg_id = $this->session->userdata('plg_id');
+		$data_pesanan = $this->Model_app->get_data_keranjang($plg_id)->result();
+		// var_dump($data_pesanan);
+
+		// Validasi sisa stok
+		foreach($data_pesanan as $d){
+			if($d->jumlah > $d->produk_stok){
+				redirect(base_url('keranjang'));
+			}
+			break;
+		}
 
 		$data['no_pesanan'] = $this->generate_no_pesanan($as_user);
 		// var_dump($data['no_pesanan']);
@@ -58,11 +68,8 @@ class Pesanan extends CI_Controller
 		// Insert Pesanan
 		$this->Model_app->insert_data('pesanan', $data);
 
-		// Insert Detail Pesanan
-		$data_pesanan = $this->Model_app->get_data_keranjang($plg_id)->result();
-
+		// Insert Detail Pesanan dan Update stok produk
 		foreach ($data_pesanan as $pesanan_detail) {
-
 			$harga_beli = $this->Model_app->edit_data('produk', array('produkid' => $pesanan_detail->produkid))->row()->produk_harga;
 			$detail = array(
 				'no_pesanan' => $data['no_pesanan'],
@@ -74,6 +81,10 @@ class Pesanan extends CI_Controller
 				'sub_total' => $pesanan_detail->sub_total,
 			);
 			$this->Model_app->insert_data('detail_pesanan', $detail);
+
+			$where = ['produkid' => $pesanan_detail->produkid];
+			$update = ['produk_stok' => $pesanan_detail->produk_stok - $pesanan_detail->jumlah];
+			$this->Model_app->update_data('produk', $where, $update);
 		}
 
 		// Hapus Keranjang
