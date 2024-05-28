@@ -75,7 +75,8 @@ class Keranjang extends CI_Controller
 	}
 	function tambahDigital($produkid)
 	{
-
+		if($this->input->post('qty') > $this->input->post('sisa_stok')) redirect(base_url("produk/beliEcer/$produkid?alert=overqty"));
+		
 		$data_produk = $this->Model_app->edit_data('produk', array('produkid' => $produkid))->row();
 		$plg_id = $this->session->userdata('plg_id');
 

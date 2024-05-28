@@ -7,6 +7,15 @@
         left: -1px;
     }
 </style>
+
+<?php
+if(isset($_GET['alert'])){
+    if($_GET['alert'] == 'overqty'){
+        echo "<script>alert('Qty tidak boleh melebihi stok yang ada!');</script>";
+    }
+}
+?>
+
 <!-- SECTION HEADLINE -->
 <div class="section-headline-wrap">
     <div class="section-headline">
@@ -48,6 +57,7 @@
                 <!-- INFORMATION LAYOUT -->
                 <div class="information-layout v2">
                     <form method="post" action="<?= base_url('keranjang/tambahDigital/') . $produk->produkid ?>" enctype="multipart/form-data">
+                    <input type="hidden" name="sisa_stok" value="<?= $produk->produk_stok ?>">
                         <div class="form-row information-layout-item">
                             <div class="form-group col-md-6">
                                 <p class="text-header">Jumlah / Qty :</p>
