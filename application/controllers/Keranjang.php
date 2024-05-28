@@ -114,45 +114,44 @@ class Keranjang extends CI_Controller
 	}
 	function tambahOffset($produkid)
 	{
-		if ($this->input->post('qty') >= $this->input->post('stok_saat_ini')) {
-			echo "<script>alert('Stok Tidak Cukup'); window.location.href = '" . base_url('produk/beliGrosir/' . $produkid) . "';</script>";
-		} else {
-			$data_produk = $this->Model_app->edit_data('produk', array('produkid' => $produkid))->row();
-			$plg_id = $this->session->userdata('plg_id');
+		if($this->input->post('qty') > $this->input->post('sisa_stok')) redirect(base_url("produk/beliGrosir/$produkid?alert=overqty"));
+		
+		$data_produk = $this->Model_app->edit_data('produk', array('produkid' => $produkid))->row();
+		$plg_id = $this->session->userdata('plg_id');
 
-			$data['produkid'] = $produkid;
-			$data['jumlah'] = $this->input->post('qty');
-			// $bahan = $this->input->post('bahan');
-			$ongkos = $this->input->post('ongkos');
-			$opKirim = $this->input->post('opKirim');
-			$data['isi_pesan'] = $this->input->post('isi_pesan');
-			$data['provinsi'] = $this->input->post('destination_provice_text');
-			$data['kota'] = $this->input->post('destination_city_text');
-			$data['sub_total'] = ($data_produk->produk_harga * $data['jumlah']) + $ongkos;
+		$data['produkid'] = $produkid;
+		$data['jumlah'] = $this->input->post('qty');
+		// $bahan = $this->input->post('bahan');
+		$ongkos = $this->input->post('ongkos');
+		$opKirim = $this->input->post('opKirim');
+		$data['isi_pesan'] = $this->input->post('isi_pesan');
+		$data['provinsi'] = $this->input->post('destination_provice_text');
+		$data['kota'] = $this->input->post('destination_city_text');
+		$data['sub_total'] = ($data_produk->produk_harga * $data['jumlah']) + $ongkos;
 
-			// var subtotal = ((bahan * qty) + (harga * qty)) + parseInt(ongkos);
-			// var_dump($bahan, $opKirim, $ongkos, $data_produk->harga_digital, $data['jumlah'], $data['sub_total']);
-			// die();
-			$data['plg_id'] = $this->session->userdata('plg_id');
+		// var subtotal = ((bahan * qty) + (harga * qty)) + parseInt(ongkos);
+		// var_dump($bahan, $opKirim, $ongkos, $data_produk->harga_digital, $data['jumlah'], $data['sub_total']);
+		// die();
+		$data['plg_id'] = $this->session->userdata('plg_id');
 
-			$config['upload_path'] = './assets/img/pesanan/';
-			$config['allowed_types'] = 'jpg|png|jpeg';
-			$config['file_name'] = 'desain' . time();
-			$config['max_size'] = '2048';
+		$config['upload_path'] = './assets/img/pesanan/';
+		$config['allowed_types'] = 'jpg|png|jpeg';
+		$config['file_name'] = 'desain' . time();
+		$config['max_size'] = '2048';
 
-			$this->load->library('upload', $config);
+		$this->load->library('upload', $config);
 
-			if ($_FILES['image']['name']) {
-				if ($this->upload->do_upload('image')) {
-					$image = $this->upload->data();
-					$data['gambar'] = $image['file_name'];
-					// unlink('assets/img/pelanggan/'.$this->session->userdata('plg_foto'));
-				}
+		if ($_FILES['image']['name']) {
+			if ($this->upload->do_upload('image')) {
+				$image = $this->upload->data();
+				$data['gambar'] = $image['file_name'];
+				// unlink('assets/img/pelanggan/'.$this->session->userdata('plg_foto'));
 			}
-
-			$this->Model_app->insert_data('keranjang', $data);
-			redirect(base_url('keranjang'));
 		}
+
+		$this->Model_app->insert_data('keranjang', $data);
+		redirect(base_url('keranjang'));
+		
 	}
 
 	function hapus($id)
