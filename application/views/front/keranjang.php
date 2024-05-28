@@ -83,6 +83,7 @@
 									<a href="<?= base_url('produk/index/') . $pesanan->produkid ?>">
 										<p class="text-header small"><?= $pesanan->produk_nama ?></p>
 									</a>
+									<?= $pesanan->jumlah > $pesanan->produk_stok ? '<i style="color:red">Stok produk tidak cukup/habis</i>' : ''?>
 									<p class="" style="color: black"><b>Qty :</b> x<?= $pesanan->jumlah ?></p>
 									<p class="description" style="color: black">Isi Pesan : <?= $pesanan->isi_pesan ?></p>
 								</div>
