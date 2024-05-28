@@ -174,11 +174,9 @@
                 <div class="post-content">
                     <!-- POST PARAGRAPH -->
                     <div class="post-paragraph">
-                        <h3 class="post-title">Deskripsi:</h3>
-                        <p><b>Nama Produk : </b><?= $produk->produk_deskripsi ?>
-                            <br>
-                            <b>Stok : </b><?= $produk->produk_stok ?>
-                        </p>
+                        <h3 class="post-title">Deskripsi : </h3>
+                        <p><?= $produk->produk_deskripsi ?></p>
+                        <h3 class="post-title">Stok : <?= $produk->produk_stok ?></h3>
                     </div>
 
                     <div class="clearfix"></div>

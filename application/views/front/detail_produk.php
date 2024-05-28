@@ -171,9 +171,9 @@
 				<hr class="line-separator">
 				<div class="post-content">
 					<div class="post-paragraph">
-						<h3 class="post-title">Deskripsi:</h3>
+						<h3 class="post-title">Deskripsi : </h3>
 						<p><?= $produk->produk_deskripsi ?></p>
-						<p><?= $produk->produk_stok ?></p>
+						<h3 class="post-title">Stok : <?= $produk->produk_stok ?></h3>
 					</div>
 					<div class="clearfix"></div>
 				</div>
